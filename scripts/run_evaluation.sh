@@ -7,11 +7,25 @@ AWS_KEY_ID=xxx
 AWS_SECRET_KEY=xxx
 AUTHORIZATION=xxx
 
+current_date=$(date +%Y%m%d)
+target_date="20230730"
+if [[ $current_date -lt $target_date ]]; then
+    EXERCISE=true
+else
+    EXERCISE=false
+fi
 
-for((i=1;i<=10;i++));
-do
-    aws s3 cp s3://carsmos-ningxia/$(aws s3api list-objects-v2 --bucket carsmos-ningxia --prefix exercise | jq ".Contents[$i].Key" | sed 's/"//g' ) ${SCRIPT_ROOT}/scenarios/
-done
+if [ "$EXERCISE" = true ]; then
+    for((i=1;i<=10;i++));
+    do
+        aws s3 cp s3://carsmos-ningxia/`aws s3api list-objects-v2 --bucket carsmos-ningxia --prefix exercise | jq ".Contents[$i].Key" | sed 's/"//g' ` ${SCRIPT_ROOT}/scenarios/
+    done
+else
+    for((i=1;i<=10;i++));
+    do
+        aws s3 cp s3://carsmos-ningxia/`aws s3api list-objects-v2 --bucket carsmos-ningxia --prefix scenarios | jq ".Contents[$i].Key" | sed 's/"//g' ` ${SCRIPT_ROOT}/scenarios/
+    done
+fi
 
 SCENARIO_COUNT=$(ls -l "${SCRIPT_ROOT}"/scenarios | wc -l)
 
