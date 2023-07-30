@@ -8,7 +8,7 @@ AWS_SECRET_KEY=xxx
 AUTHORIZATION=xxx
 
 current_date=$(date +%Y%m%d)
-target_date="20230730"
+target_date="20230831"
 if [[ $current_date -lt $target_date ]]; then
     EXERCISE=exercise
 else
